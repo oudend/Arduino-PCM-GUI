@@ -72,6 +72,7 @@ unsigned char last_sample_value = 0;
 int sounddata_length=0;
 
 int defined_bits = 2;
+int bits_max = 3;
 
 int mask = 0b00000011;
 
@@ -95,21 +96,10 @@ ISR(TIMER1_COMPA_vect) {
   }
   else {
     sample_value = pgm_read_byte(&sounddata_data[sample]);
-    
-    if(defined_bits == 8) {
-      chase_value = (((sample_value & (mask << sample_bit*2)) >> sample_bit*2)*64+32);
-      //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //lerp
 
-      //sample_value = chase_value;
-
-      sample_bit++;
-
-      //last_sample_value = chase_value;
-    }
-
-    if(defined_bits == 2) {
-      chase_value = (((sample_value & (mask << sample_bit*2)) >> sample_bit*2)*64+32);
-      //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //lerp
+    if(defined_bits != 8) {
+      chase_value = (((sample_value & (mask << sample_bit*defined_bits)) >> sample_bit*defined_bits)*64+32);
+      //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
 
       sample_value = chase_value;
 
@@ -118,22 +108,33 @@ ISR(TIMER1_COMPA_vect) {
       last_sample_value = chase_value;
     }
 
-    if(defined_bits == 4) {
-      chase_value = (((sample_value & (mask << sample_bit*4)) >> sample_bit*4)*64+32);
-      sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
+    // if(defined_bits == 4) {
+    //   chase_value = (((sample_value & (mask << sample_bit*4)) >> sample_bit*4)*64+32);
+    //   //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
 
-      //sample_value = chase_value;
+    //   sample_value = chase_value;
 
-      sample_bit++;
+    //   sample_bit++;
 
-      last_sample_value = chase_value;
-    }
+    //   last_sample_value = chase_value;
+    // }
+
+    // if(defined_bits == 1) {
+    //   chase_value = (((sample_value & (mask << sample_bit*1)) >> sample_bit*1)*64+32);
+    //   //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
+
+    //   sample_value = chase_value;
+
+    //   sample_bit++;
+
+    //   last_sample_value = chase_value;
+    // }
 
     OCR2A = sample_value;
     //Serial.println(OCR2A);
   }
   
-  if((sample_bit > 1 && defined_bits == 4) || (sample_bit > 3 && defined_bits == 2) || defined_bits == 8) {
+  if(sample_bit > bits_max || defined_bits == 8) {
     ++sample;
     sample_bit = 0;
   }
@@ -144,6 +145,8 @@ void startPlayback(unsigned char const *data, int length, int sample_rate, int b
   sounddata_data = data;
   sounddata_length = length;
   defined_bits = bits; //bits
+
+  bits_max = (8 / bits) - 1;
 
   //Serial.begin(9600);
 

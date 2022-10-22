@@ -17,7 +17,7 @@ def rescale_linear(array, new_min, new_max):
     b = new_min - m * minimum
     return m * array + b
 
-layout = [[sg.Text("Choose audio file: "), sg.Input(), sg.FileBrowse(key="-Audio-", file_types=(("wav Files", "*.wav"),("mp3 Files", "*.mp3"),), tooltip='Which audio file to convert')], [sg.Text("Choose a output directory: "), sg.Input(), sg.FolderBrowse(key="-Folder-", tooltip='Which folder to save output to')], [sg.Text("Sample rate: "), sg.Input("8000", key='-SAMPLE_RATE-', tooltip='The sample rate to convert to(8000 recommended)'), sg.Checkbox("change sample rate", key='-CHANGE_SAMPLE_RATE-', default=True, tooltip='Off means the original sample rate is preferred(True recommended)')], [sg.Combo(["8bit", "4bit", "2bit"], "8bit", key="-BITS-", readonly=True), sg.Checkbox("convert bits", key='-CONVERT_BITS-', default=True, tooltip='Will convert audio to 8bit(should only be off if it is already 8bit)'), sg.Text("Bit range", tooltip="The trimming range for 2bit and 4bit audio"), sg.Input("127", key="-TRIM_RANGE-")], [sg.Checkbox("rescale", key='-RESCALE-', default=False, tooltip='Will make low sample rates louder(8bit only)')], [sg.Button('Calculate'), sg.Button('Quit')], [sg.Text(size=(60,1), key='-ERROR-', text_color='red')]]
+layout = [[sg.Text("Choose audio file: "), sg.Input(), sg.FileBrowse(key="-Audio-", file_types=(("wav Files", "*.wav"),("mp3 Files", "*.mp3"),), tooltip='Which audio file to convert')], [sg.Text("Choose a output directory: "), sg.Input(), sg.FolderBrowse(key="-Folder-", tooltip='Which folder to save output to')], [sg.Text("Sample rate: "), sg.Input("8000", key='-SAMPLE_RATE-', tooltip='The sample rate to convert to(8000 recommended)'), sg.Checkbox("change sample rate", key='-CHANGE_SAMPLE_RATE-', default=True, tooltip='Off means the original sample rate is preferred(True recommended)')], [sg.Combo(["8bit", "4bit", "2bit", "1bit"], "8bit", key="-BITS-", readonly=True), sg.Checkbox("convert bits", key='-CONVERT_BITS-', default=True, tooltip='Will convert audio to 8bit(should only be off if it is already 8bit)'), sg.Text("Bit range", tooltip="The trimming range for 2bit and 4bit audio"), sg.Input("127", key="-TRIM_RANGE-")], [sg.Checkbox("rescale", key='-RESCALE-', default=False, tooltip='Will make low sample rates louder(8bit only)')], [sg.Button('Calculate'), sg.Button('Quit')], [sg.Text(size=(60,1), key='-ERROR-', text_color='red')]]
 
 window = sg.Window('PCMO', layout)
 
@@ -107,12 +107,15 @@ if bits == "4bit":
 elif bits == "2bit":
     mult = 6
     bitNum = 2
+elif bits == "1bit":
+    mult = 7
+    bitNum = 1
 
 #bit_range = 100 # default = 127
 print("bit range: ", bit_range)
 bit_half = (255 - bit_range) // 2
 
-if bits == "2bit" or bits == "4bit":
+if bits != "8bit":
     print(f"converting to {bits} format")
     bit_max = 8 / bitNum
     for index, sample in enumerate(data):

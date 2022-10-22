@@ -7,6 +7,10 @@
 
 //jrl is 2bit and 8000 sample rate
 
+//undertale 8 is 1bit and 8000 sample rate
+
+//undertale 9 is 1bit and 4000 sample rate
+
 const int SAMPLE_RATE = 8000;
 const int BITS = 2; // only 2, 4 or 8 supported
 
