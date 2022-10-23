@@ -1,28 +1,22 @@
 #include "PCM.h"
-#include "./output/jrl.h"
+#include "./output/computer.h"
 
-//mall 1 and 2 are 2000 sample rate and 2 bits.
+//computer.h is an example pcm file.
 
-//undertale should be the same but I don't remember if that applies to all of them.
-
-//jrl is 2bit and 8000 sample rate
-
-//undertale 8 is 1bit and 8000 sample rate
-
-//undertale 9 is 1bit and 4000 sample rate
-
-const int SAMPLE_RATE = 8000;
-const int BITS = 2; // only 2, 4 or 8 supported
+const int SAMPLE_RATE = 10000; // 10 000 sample rate generally isn't recommended for memory efficiency. 2bit, 4k or 8k have produced comparable results.
+const int BITS = 2; // only 1, 2, 4 or 8 supported
 
 void setup()
 {
-  startPlayback(defaultSample, sizeof(defaultSample), SAMPLE_RATE, BITS);
-  //Serial.begin(9600);
 
-  //Serial.print(bells[0]);
 }
 
 void loop()
 {
+  startPlayback(defaultSample, sizeof(defaultSample), SAMPLE_RATE, BITS);
+
+  delay( (( (sizeof(defaultSample) / sizeof(defaultSample[0])) * (8 / BITS) ) / SAMPLE_RATE) * 1000 ); // FORMULA IS BROKEN
+
+  stopPlayback();
 }
 

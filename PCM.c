@@ -38,6 +38,8 @@
 #include "WProgram.h"
 #endif
 
+//#include <cmath>
+
 #include "PCM.h"
 
 /*
@@ -73,14 +75,12 @@ int sounddata_length=0;
 
 int defined_bits = 2;
 int bits_max = 3;
+int bit_multiplier = 85;
 
 int mask = 0b00000011;
 
 volatile uint16_t sample;
 volatile uint16_t sample_bit = 0;
-volatile uint16_t decremental_repeat;
-volatile uint16_t low_half_number;
-volatile uint16_t high_half_number;
 byte lastSample;
 
 // This is called at 8000 Hz to load the next sample.
@@ -98,7 +98,7 @@ ISR(TIMER1_COMPA_vect) {
     sample_value = pgm_read_byte(&sounddata_data[sample]);
 
     if(defined_bits != 8) {
-      chase_value = (((sample_value & (mask << sample_bit*defined_bits)) >> sample_bit*defined_bits)*64+32);
+      chase_value = (((sample_value & (mask << sample_bit*defined_bits)) >> sample_bit*defined_bits)*bit_multiplier); // some bitwise operations to extract the bits out of the 8bit sample
       //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
 
       sample_value = chase_value;
@@ -108,30 +108,7 @@ ISR(TIMER1_COMPA_vect) {
       last_sample_value = chase_value;
     }
 
-    // if(defined_bits == 4) {
-    //   chase_value = (((sample_value & (mask << sample_bit*4)) >> sample_bit*4)*64+32);
-    //   //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
-
-    //   sample_value = chase_value;
-
-    //   sample_bit++;
-
-    //   last_sample_value = chase_value;
-    // }
-
-    // if(defined_bits == 1) {
-    //   chase_value = (((sample_value & (mask << sample_bit*1)) >> sample_bit*1)*64+32);
-    //   //sample_value = 0.5 * last_sample_value + chase_value * 0.5; //smoothing
-
-    //   sample_value = chase_value;
-
-    //   sample_bit++;
-
-    //   last_sample_value = chase_value;
-    // }
-
     OCR2A = sample_value;
-    //Serial.println(OCR2A);
   }
   
   if(sample_bit > bits_max || defined_bits == 8) {
@@ -148,7 +125,7 @@ void startPlayback(unsigned char const *data, int length, int sample_rate, int b
 
   bits_max = (8 / bits) - 1;
 
-  //Serial.begin(9600);
+  bit_multiplier = 255 / ( pow(2, bits) - 1); //  ( pow(2, bits) - 1) is the range of the bits so 4bit is 15 because it can go from 0 to 15, to correct the range to 0 to 255 we multiply all samples by 255 / range.
 
   pinMode(speakerPin, OUTPUT);
   
