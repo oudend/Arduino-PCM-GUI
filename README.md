@@ -31,7 +31,7 @@ Includes a modified PCM library for sub 8bit encoding and any sample rate suppor
 
 # Installation
 
-To install and use the gui, clone the repository and run 
+To install and use the gui, clone the repository and run python script
 ```
 pip install requirements.txt
 ```
