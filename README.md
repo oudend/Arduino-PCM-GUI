@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h3 align="center">Arduino-pmc-audio-compressor</h3>
+  <h3 align="center">Arduino PMC GUI</h3>
 
   <p align="center">
     Python gui for generating Arduino PCM data from audio.
