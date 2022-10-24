@@ -26,7 +26,9 @@
 ## About The Project
 
 A minimalistic python gui that converts audio to PCM format which can be played using the PCM library for Arduino.
-Includes a modified PCM library for sub 8bit encoding and any sample rate support. 
+Includes a modified PCM library for 8bit(default), sub 8bit encoding and any sample rate support. 
+
+Smaller sample rates and/or bits lead to more compression which can lead to considerable memory saves but compromises quality. 
 
 ![image](/PCMO.png)
 
