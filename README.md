@@ -41,3 +41,4 @@ pip install requirements.txt
 
 ### 2bit and 8k sample rate 
 ![Megalovania 2bit 8k](/examples/megalovania.mov)
+<video src="/examples/megalovania.mov"></video>
