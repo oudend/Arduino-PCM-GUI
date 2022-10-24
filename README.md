@@ -38,6 +38,6 @@ pip install requirements.txt
 
 # Examples
 
-![Megalovania 2bit 8k](/megalovania.mov)
+![Megalovania 2bit 8k](/examples/megalovania.mov)
 
 Work in progress.
