@@ -38,6 +38,6 @@ pip install requirements.txt
 
 # Examples
 
-![Megalovania 2bit 8k](/examples/megalovania.mov)
 
-Work in progress.
+### 2bit and 8k sample rate 
+![Megalovania 2bit 8k](/examples/megalovania.mov)
