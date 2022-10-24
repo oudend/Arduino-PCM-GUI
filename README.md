@@ -1,6 +1,8 @@
 # Arduino-pmc-audio-compressor
 
-An python gui and modified PCM library for sub 8bit audio encoding and any sample rate.
+A python gui and modified PCM library for sub 8bit audio encoding and any sample rate.
+
+![image](/PCMO.png)
 
 # Installation
 
