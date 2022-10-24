@@ -18,7 +18,7 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li><a href="#installation">Installation</a></li>
-    <li><a href="#examples">Usage</a></li>
+    <li><a href="#examples">Examples</a></li>
   </ol>
 </details>
 
